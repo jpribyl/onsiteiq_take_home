@@ -1,0 +1,36 @@
+x-postgres-environment: &x-postgres-environment
+  POSTGRES_DB: ${POSTGRES_DB}
+  POSTGRES_USER: ${POSTGRES_USER}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+x-web-environment: &x-web-environment
+  <<: *x-postgres-environment
+  DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+x-web-base: &x-web-base
+    build: 
+      dockerfile: ./docker/Dockerfile
+    volumes:
+      - .:/code
+    ports:
+      - "8654:8654"
+    environment:
+      <<: *x-web-environment
+    depends_on:
+      - db
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./docker/data/db:/var/lib/postgresql/data
+    environment:
+      <<: *x-postgres-environment
+    ports:
+      - "9432:5432"
+  web:
+    <<: *x-web-base
+    command: python manage.py runserver 0.0.0.0:8654
+    profiles:
+      - app
+  shell:
+    <<: *x-web-base
+    profiles:
+      - shell
