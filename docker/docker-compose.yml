@@ -2,6 +2,8 @@ x-postgres-environment: &x-postgres-environment
   POSTGRES_DB: ${POSTGRES_DB}
   POSTGRES_USER: ${POSTGRES_USER}
   POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  POSTGRES_HOST: ${POSTGRES_HOST}
+  POSTGRES_PORT: ${POSTGRES_PORT}
 x-web-environment: &x-web-environment
   <<: *x-postgres-environment
   DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
@@ -15,7 +17,8 @@ x-web-base: &x-web-base
     environment:
       <<: *x-web-environment
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 services:
   db:
     image: postgres
@@ -25,6 +28,11 @@ services:
       <<: *x-postgres-environment
     ports:
       - "9432:5432"
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      interval: 1s
+      timeout: 1s
+      retries: 10
   web:
     <<: *x-web-base
     command: python manage.py runserver 0.0.0.0:8654
