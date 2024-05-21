@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import models as django_contrib_auth_models
-from emeraldhouse.models import job_posting as job_posting_models
+from emeraldhouse.models import job_posting_models
 
 
 class Applicant(models.Model):

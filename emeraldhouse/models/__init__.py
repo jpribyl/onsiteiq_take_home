@@ -1,7 +1,7 @@
-from emeraldhouse.models import applicant
-from emeraldhouse.models import job_posting
+from emeraldhouse.models import applicant_models
+from emeraldhouse.models import job_posting_models
 
 __all__ = [
-    "applicant",
-    "job_posting",
+    "applicant_models",
+    "job_posting_models",
 ]
