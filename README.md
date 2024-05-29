@@ -245,10 +245,6 @@ Several commands are exposed through the Makefile:
   - Builds the app docker-compose profile
 - `make bash`
   - Drops the user into a bash session on the docker container
-- `make docs`
-  - Generate and serve docs locally on port 8080 using drf-spectacular
-- `make generate_docs`
-  - Will generate docs using drf-spectacular
 - `make help` (Or simply `make`)
   - print help message
 - `make migrate`
@@ -267,3 +263,80 @@ Several commands are exposed through the Makefile:
   - Drops the user into a Django shell using `python manage.py shell`
 - `make test`
   - Runs the test suite using pytest
+
+## Curl commands to satisfy the project's requirements
+
+### Create Applicants?
+
+```
+curl -X 'POST' \
+  'http://localhost:8654/applicants/' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: <REPLACE WITH YOUR TOKEN>' \
+  -d '{
+  "user": {
+    "first_name": "first",
+    "last_name": "last",
+    "email": "first@last.com"
+  },
+  "job_posting": {
+    "title": "engineer"
+  }
+}'
+```
+
+### Create Applicant Notes?
+
+```
+curl -X 'POST' \
+  'http://localhost:8654/applicants/<REPLACE WITH YOUR APPLICANT ID>/add_note/' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: <REPLACE WITH YOUR TOKEN>' \
+  -d '{
+  "text": "string",
+  "applicant_id": 0
+}'
+```
+
+### Retrieve Applicant Notes?
+
+Note- this was not explicitly asked for, however it is possible for a user to have view access to an applicant without having view access to their notes. So, I have not attached them to the applicant response. A future improvement would be to attach them there when / if they are viewable.
+
+```
+curl -X 'GET' \
+  'http://localhost:8654/applicants/<REPLACE WITH YOUR APPLICANT ID>/view_notes/' \
+  -H 'Authorization: <REPLACE WITH YOUR TOKEN>' \
+  -H 'accept: application/json'
+```
+
+### Approve or Reject a candidate?
+
+```
+
+# Approve a candidate
+curl -X 'POST' \
+ 'http://localhost:8654/applicants/<REPLACE WITH YOUR APPLICANT ID>/transition_applicant/' \
+ -H 'accept: application/json' \
+ -H 'Content-Type: application/json' \
+ -H 'Authorization: <REPLACE WITH YOUR TOKEN>' \
+ -d '{
+"state": "APPROVED"
+}'
+
+# Reject a candidate
+curl -X 'POST' \
+ 'http://localhost:8654/applicants/<REPLACE WITH YOUR APPLICANT ID>/transition_applicant/' \
+ -H 'accept: application/json' \
+ -H 'Content-Type: application/json' \
+ -H 'Authorization: <REPLACE WITH YOUR TOKEN>' \
+ -d '{
+"state": "REJECTED"
+}'
+
+```
+
+### Respect permissions?
+
+Left as an exercise to the reader.
