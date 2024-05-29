@@ -11,7 +11,7 @@ from emeraldhouse.permissions import applicant_rules, permission_mixins
 from emeraldhouse.services import applicant_service
 
 
-class ApplicantSerializer(serializers.ModelSerializer):
+class ApplicantSerializer(serializers.ModelSerializer[applicant_models.Applicant]):
     user = auth_user_api.WebSafeUserSerializer()
     job_posting = job_posting_api.JobPostingSerializer()
     applicant_state = serializers.SerializerMethodField()
@@ -63,7 +63,9 @@ class ApplicantTransitionSerializer(serializers.Serializer):
     )
 
 
-class ApplicantNoteSerializer(serializers.ModelSerializer):
+class ApplicantNoteSerializer(
+    serializers.ModelSerializer[applicant_models.ApplicantNote]
+):
     applicant_id = serializers.IntegerField()
 
     class Meta:

@@ -31,7 +31,7 @@ def get_user_object_permission(
         user_id=user_object_permission.user_id,
         object_id=user_object_permission.object_id,
         permission_id=user_object_permission.permission_id,
-        content_type=user_object_permission.content_type,
+        content_type=str(user_object_permission.content_type),
     )
 
 
@@ -54,5 +54,5 @@ def get_or_create_user_object_permission(
         user_id=user_object_permission.user_id,
         object_id=user_object_permission.object_id,
         permission_id=user_object_permission.permission_id,
-        content_type=user_object_permission.content_type,
+        content_type=str(user_object_permission.content_type),
     )

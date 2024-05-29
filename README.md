@@ -251,6 +251,8 @@ Several commands are exposed through the Makefile:
   - Runs Django migrations using `python manage.py migrate`
 - `make migrations`
   - Analyzes Django model files for changes using `python manage.py makemigrations`
+- `make mypy`
+  - Runs mypy on the source directory
 - `make pip_install`
   - Installs pip packages. Usage requires an argument of 'packages': `make pip_install packages="<some python package> <some other python package>"`
 - `make pull`

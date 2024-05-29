@@ -57,6 +57,10 @@ add_packages: pip_install app_build shell_build ## Installs packages and rebuild
 test: ## Runs the test suite using pytest
 	${docker_compose} --profile shell run --rm shell pytest --cov ${pytest_options}
 
+.PHONY: mypy
+mypy: ## Runs mypy on the source directory
+	${docker_compose} --profile shell run --rm shell mypy emeraldhouse/
+
 .PHONY: add_or_update_employee
 add_or_update_employee: ## Will add a new employee capable of authentication to the database. If there is an existing user with that email, then it will instead overwrite the groups with those provided
 	${docker_compose} --profile shell run --rm shell bash -c 'python manage.py add_employee --first_name ${first_name} --last_name ${last_name} --email ${email} --password ${password} --security_groups ${security_groups}'

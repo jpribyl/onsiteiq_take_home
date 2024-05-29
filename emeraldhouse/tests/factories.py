@@ -1,12 +1,11 @@
 from datetime import datetime
 
-import pytz
-
 import factory
+import pytz
 from django.contrib.auth import models as django_contrib_auth_models
 from faker import Factory as FakerFactory
 
-from emeraldhouse.models import applicant_models, job_posting_models, permission_models
+from emeraldhouse.models import applicant_models, job_posting_models
 
 faker = FakerFactory.create()
 
