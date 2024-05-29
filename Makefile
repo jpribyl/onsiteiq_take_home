@@ -4,6 +4,7 @@ export POSTGRES_PASSWORD=postgres
 export POSTGRES_HOST=db
 export POSTGRES_PORT=5432
 export DJANGO_SECRET_KEY=django-insecure-cbs+0uelf*4v0+9b3aw5!%^41xvs$^fj(ash_4cq^+k&\#7\#7m9
+export DJANGO_SETTINGS_MODULE=emeraldhouse.config.settings
 
 docker_compose=docker compose --project-directory ./ -f ./docker/docker-compose.yml
 
@@ -28,10 +29,6 @@ app_build: ## Builds the app docker-compose profile
 .PHONY: shell_build
 shell_build: ## Builds the Django shell docker-compose profile
 	${docker_compose} --profile shell build
-
-.PHONY: seed
-seed: ## Seeds the database with development data
-	echo TODO
 
 .PHONY: migrate
 migrate: ## Runs Django migrations using `python manage.py migrate`
@@ -58,4 +55,8 @@ add_packages: pip_install app_build shell_build ## Installs packages and rebuild
 
 .PHONY: test
 test: ## Runs the test suite using pytest
-	echo TODO
+	${docker_compose} --profile shell run --rm shell pytest --cov ${pytest_options}
+
+.PHONY: add_or_update_employee
+add_or_update_employee: ## Will add a new employee capable of authentication to the database. If there is an existing user with that email, then it will instead overwrite the groups with those provided
+	${docker_compose} --profile shell run --rm shell bash -c 'python manage.py add_employee --first_name ${first_name} --last_name ${last_name} --email ${email} --password ${password} --security_groups ${security_groups}'

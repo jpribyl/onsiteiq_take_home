@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from emeraldhouse.models import job_posting_models
 
 
